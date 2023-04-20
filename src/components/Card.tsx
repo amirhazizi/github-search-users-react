@@ -1,10 +1,56 @@
-import React from 'react';
-import { GithubContext } from '../context/context';
-import styled from 'styled-components';
-import { MdBusiness, MdLocationOn, MdLink } from 'react-icons/md';
+import React from "react"
+import { useGlobalGithubContext } from "../context/context"
+import styled from "styled-components"
+import { MdBusiness, MdLocationOn, MdLink } from "react-icons/md"
+type GlobalContext = {
+  githubUser: {
+    avatar_url: string
+    html_url: string
+    name: string
+    company: string
+    blog: string
+    bio: string
+    location: string
+    twitter_username: string
+  }
+}
 const Card = () => {
-  return <h2>card component</h2>;
-};
+  const { githubUser } = useGlobalGithubContext() as GlobalContext
+  const {
+    avatar_url,
+    html_url,
+    name,
+    company,
+    blog,
+    bio,
+    location,
+    twitter_username,
+  } = githubUser
+  return (
+    <Wrapper>
+      <header>
+        <img src={avatar_url} alt={name} />
+        <div>
+          <h4>{name}</h4>
+          {twitter_username && <p>@{twitter_username}</p>}
+        </div>
+        <a href={html_url}>follow</a>
+      </header>
+      <p className='bio'>{bio || "random github user"}</p>
+      <div className='links'>
+        <p>
+          <MdBusiness /> {company || "freelancer"}
+        </p>
+        <p>
+          <MdLocationOn /> {location || "somewhere"}
+        </p>
+        <a href={`https://${blog || "github.com/amirhazizi"}`}>
+          <MdLink /> {blog || "not found"}
+        </a>
+      </div>
+    </Wrapper>
+  )
+}
 const Wrapper = styled.article`
   background: var(--clr-white);
   padding: 1.5rem 2rem;
@@ -13,7 +59,7 @@ const Wrapper = styled.article`
   border-bottom-right-radius: var(--radius);
   position: relative;
   &::before {
-    content: 'user';
+    content: "user";
     position: absolute;
     top: 0;
     left: 0;
@@ -84,5 +130,5 @@ const Wrapper = styled.article`
       }
     }
   }
-`;
-export default Card;
+`
+export default Card
