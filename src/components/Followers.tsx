@@ -1,15 +1,20 @@
 import React from "react"
 import { useGlobalGithubContext } from "../context/context"
 import styled from "styled-components"
-
+type FollowerProps = {
+  avatar_url: string
+  html_url: string
+  login: string
+}
 const Followers = () => {
   const { followers } = useGlobalGithubContext() as {
-    followers: object[]
+    followers: FollowerProps[]
   }
   return (
     <Wrapper>
       <div className='followers'>
-        {followers.map(({ avatar_url, html_url, login }) => {
+        {followers.map((follower) => {
+          const { avatar_url, html_url, login } = follower
           return (
             <article>
               <img src={avatar_url} alt={login} />
