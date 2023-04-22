@@ -14,7 +14,7 @@ const Repos = () => {
   const { repos } = useGlobalGithubContext() as Repos
 
   // get Languages
-  const languages = repos.reduce((total, item) => {
+  const languages = repos.reduce((total: any, item) => {
     const { language, stargazers_count } = item
     if (!language) return total
     if (!total[language]) {
@@ -41,8 +41,8 @@ const Repos = () => {
   mostUsed.sort((a, b) => b.value - a.value).slice(0, 5)
   mostStared.sort((a, b) => b.value - a.value).slice(0, 5)
 
-  let { stars, forks } = repos.reduce(
-    (total, item) => {
+  const { stars, forks } = repos.reduce(
+    (total: any, item) => {
       const { stargazers_count, name, forks } = item
       total.stars[stargazers_count] = {
         label: name,
