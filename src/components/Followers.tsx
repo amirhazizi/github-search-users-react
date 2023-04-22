@@ -2,6 +2,7 @@ import React from "react"
 import { useGlobalGithubContext } from "../context/context"
 import styled from "styled-components"
 type FollowerProps = {
+  id: number
   avatar_url: string
   html_url: string
   login: string
@@ -14,9 +15,9 @@ const Followers = () => {
     <Wrapper>
       <div className='followers'>
         {followers.map((follower) => {
-          const { avatar_url, html_url, login } = follower
+          const { id, avatar_url, html_url, login } = follower
           return (
-            <article>
+            <article key={id}>
               <img src={avatar_url} alt={login} />
               <div>
                 <h4>{login}</h4>
