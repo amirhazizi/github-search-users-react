@@ -22,6 +22,7 @@ type GithubContextType = {
   isLoading: boolean
   setIsLoading: Function
 }
+
 const GithubContext = React.createContext<GithubContextType | null>(null)
 const GithubProvider = ({ children }: PropType) => {
   const [githubUser, setGithubUser] = useState(mockUser)
@@ -35,15 +36,22 @@ const GithubProvider = ({ children }: PropType) => {
     toggleError()
     setIsLoading(true)
     try {
-      const res = await autoFetch(`/users/${user}`)
-      if (res) {
-        setGithubUser(res.data)
-      } else {
-        toggleError(true, "there is no user with that username")
+      const userRes = await autoFetch(`/users/${user}`)
+      if (userRes) {
+        const userReposRes = await autoFetch(
+          `/users/${user}/repos?per_page=100`
+        )
+        const userFollowersRes = await autoFetch(`/users/${user}/followers`)
+        setGithubUser(userRes.data)
+        setFollowers(userFollowersRes.data)
+        setRepos(userReposRes.data)
       }
       setIsLoading(false)
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      console.log(error.response)
+      if (error.response.data.message === "Not Found") {
+        toggleError(true, "there is no user with that username")
+      }
       setIsLoading(false)
     }
     setRequests((prevReq) => {

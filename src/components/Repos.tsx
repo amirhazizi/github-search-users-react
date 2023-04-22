@@ -38,19 +38,27 @@ const Repos = () => {
     return { ...item, value: item.stars }
   })
 
-  mostUsed.sort((a, b) => b.value - a.value).slice(0, 5)
-  mostStared.sort((a, b) => b.value - a.value).slice(0, 5)
+  mostUsed.sort((a, b) => b.value - a.value)
+  mostStared.sort((a, b) => b.value - a.value)
+  const mostUsedLanguages = mostUsed.slice(0, 5)
+  const mostStaredLanguages = mostStared.slice(0, 5)
+  // console.log(mostUsed)
 
   const { stars, forks } = repos.reduce(
     (total: any, item) => {
       const { stargazers_count, name, forks } = item
-      total.stars[stargazers_count] = {
-        label: name,
-        value: stargazers_count,
+      if (stargazers_count > 0) {
+        total.stars[stargazers_count] = {
+          label: name,
+          value: stargazers_count,
+        }
       }
-      total.forks[forks] = {
-        label: name,
-        value: forks,
+
+      if (forks > 0) {
+        total.forks[forks] = {
+          label: name,
+          value: forks,
+        }
       }
 
       return total
@@ -62,15 +70,17 @@ const Repos = () => {
   )
   const mostStars: object[] = Object.values(stars)
   const mostForks: object[] = Object.values(forks)
-  mostStars.slice(-5).reverse()
-  mostForks.slice(-5).reverse()
+  const mostStaredRepos = mostStars.slice(-5)
+  mostForks.slice(-5)
+  const mostForksRepos = mostForks.reverse()
+
   return (
     <section className='section'>
       <Wrapper className='section-center'>
-        <Pie3D data={mostUsed} />
-        <Column3D data={mostStars} />
-        <Doughnut2D data={mostStared} />
-        <Bar3D data={mostForks} />
+        <Pie3D data={mostUsedLanguages} />
+        <Column3D data={mostStaredRepos} />
+        <Doughnut2D data={mostStaredLanguages} />
+        <Bar3D data={mostForksRepos} />
         <div></div>
       </Wrapper>
     </section>
