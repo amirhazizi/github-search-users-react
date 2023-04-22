@@ -18,27 +18,52 @@ type GithubContextType = {
   requests: number
   limit: number
   isError: object
+  searchGithubUser: Function
 }
 const GithubContext = React.createContext<GithubContextType | null>(null)
 const GithubProvider = ({ children }: PropType) => {
-  const [githubUser, setGuthubUser] = useState(mockUser)
+  const [githubUser, setGithubUser] = useState(mockUser)
   const [repos, setRepos] = useState(mockRepos)
   const [followers, setFollowers] = useState(mockFollowers)
   const [requests, setRequests] = useState(0)
   const [limit, setLimit] = useState(0)
   const [isError, setIsError] = useState({ show: false, msg: "" })
   const [isLoading, setIsLoading] = useState(false)
+  const searchGithubUser = async (user: string) => {
+    toggleError()
+    setIsLoading(true)
+    try {
+      const res = await autoFetch(`/users/${user}`)
+      if (res) {
+        setGithubUser(res.data)
+        setRequests((prevReq) => {
+          if (prevReq <= 0) return 0
+          return prevReq - 1
+        })
+      } else {
+        toggleError(true, "there is no user with that username")
+      }
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+  }
   const checkRequests = async () => {
-    const {
-      data: {
-        rate: { limit, remaining, reset },
-      },
-    } = await autoFetch("/rate_limit")
+    try {
+      const {
+        data: {
+          rate: { limit, remaining, reset },
+        },
+      } = await autoFetch("/rate_limit")
 
-    setRequests(remaining)
-    setLimit(limit)
-    if (!remaining) {
-      toggleError(true, "sorry, toy have exceeded your hourly rate limit!")
+      setRequests(remaining)
+      setLimit(limit)
+      if (!remaining) {
+        toggleError(true, "sorry, toy have exceeded your hourly rate limit!")
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -50,7 +75,15 @@ const GithubProvider = ({ children }: PropType) => {
   }
   return (
     <GithubContext.Provider
-      value={{ githubUser, repos, followers, requests, limit, isError }}
+      value={{
+        githubUser,
+        repos,
+        followers,
+        requests,
+        limit,
+        isError,
+        searchGithubUser,
+      }}
     >
       {children}
     </GithubContext.Provider>

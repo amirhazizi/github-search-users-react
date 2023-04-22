@@ -6,14 +6,16 @@ type GlobalContextProps = {
   requests: number
   limit: number
   isError: { show: boolean; msg: string }
+  searchGithubUser: Function
 }
 const Search = () => {
   const [user, setUser] = React.useState("")
-  const { requests, limit, isError } =
+  const { requests, limit, isError, searchGithubUser } =
     useGlobalGithubContext() as GlobalContextProps
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (user) {
+      searchGithubUser(user)
     }
   }
   return (
