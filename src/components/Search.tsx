@@ -7,10 +7,11 @@ type GlobalContextProps = {
   limit: number
   isError: { show: boolean; msg: string }
   searchGithubUser: Function
+  isLoading: boolean
 }
 const Search = () => {
   const [user, setUser] = React.useState("")
-  const { requests, limit, isError, searchGithubUser } =
+  const { requests, limit, isError, searchGithubUser, isLoading } =
     useGlobalGithubContext() as GlobalContextProps
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -35,7 +36,9 @@ const Search = () => {
               type='text'
               placeholder='enter github user'
             />
-            {requests > 0 && <button type='submit'>search</button>}
+            {requests > 0 && !isLoading && (
+              <button type='submit'>search</button>
+            )}
           </div>
         </form>
         <h3>

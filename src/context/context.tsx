@@ -19,6 +19,8 @@ type GithubContextType = {
   limit: number
   isError: object
   searchGithubUser: Function
+  isLoading: boolean
+  setIsLoading: Function
 }
 const GithubContext = React.createContext<GithubContextType | null>(null)
 const GithubProvider = ({ children }: PropType) => {
@@ -36,10 +38,6 @@ const GithubProvider = ({ children }: PropType) => {
       const res = await autoFetch(`/users/${user}`)
       if (res) {
         setGithubUser(res.data)
-        setRequests((prevReq) => {
-          if (prevReq <= 0) return 0
-          return prevReq - 1
-        })
       } else {
         toggleError(true, "there is no user with that username")
       }
@@ -48,6 +46,10 @@ const GithubProvider = ({ children }: PropType) => {
       console.log(error)
       setIsLoading(false)
     }
+    setRequests((prevReq) => {
+      if (prevReq <= 0) return 0
+      return prevReq - 1
+    })
   }
   const checkRequests = async () => {
     try {
@@ -83,6 +85,8 @@ const GithubProvider = ({ children }: PropType) => {
         limit,
         isError,
         searchGithubUser,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}
