@@ -4,10 +4,13 @@ import { MdSearch } from "react-icons/md"
 import { useGlobalGithubContext } from "../context/context"
 type GlobalContextProps = {
   requests: number
+  limit: number
+  isError: { show: boolean; msg: string }
 }
 const Search = () => {
   const [user, setUser] = React.useState("")
-  const { requests } = useGlobalGithubContext() as GlobalContextProps
+  const { requests, limit, isError } =
+    useGlobalGithubContext() as GlobalContextProps
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (user) {
@@ -16,6 +19,11 @@ const Search = () => {
   return (
     <section className='section'>
       <Wrapper className='section-center'>
+        {isError.show && (
+          <ErrorWrapper>
+            <p>{isError.msg}</p>
+          </ErrorWrapper>
+        )}
         <form onSubmit={handleSubmit}>
           <div className='form-control'>
             <MdSearch />
@@ -25,10 +33,12 @@ const Search = () => {
               type='text'
               placeholder='enter github user'
             />
-            {requests && <button type='submit'>search</button>}
+            {requests > 0 && <button type='submit'>search</button>}
           </div>
         </form>
-        <h3>requests: {requests} / 60</h3>
+        <h3>
+          requests: {requests} / {limit}
+        </h3>
       </Wrapper>
     </section>
   )

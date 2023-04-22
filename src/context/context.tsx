@@ -16,6 +16,8 @@ type GithubContextType = {
   repos: object[]
   followers: object[]
   requests: number
+  limit: number
+  isError: object
 }
 const GithubContext = React.createContext<GithubContextType | null>(null)
 const GithubProvider = ({ children }: PropType) => {
@@ -23,6 +25,8 @@ const GithubProvider = ({ children }: PropType) => {
   const [repos, setRepos] = useState(mockRepos)
   const [followers, setFollowers] = useState(mockFollowers)
   const [requests, setRequests] = useState(0)
+  const [limit, setLimit] = useState(0)
+  const [isError, setIsError] = useState({ show: false, msg: "" })
   const [isLoading, setIsLoading] = useState(false)
   const checkRequests = async () => {
     const {
@@ -30,17 +34,24 @@ const GithubProvider = ({ children }: PropType) => {
         rate: { limit, remaining, reset },
       },
     } = await autoFetch("/rate_limit")
+
     setRequests(remaining)
+    setLimit(limit)
     if (!remaining) {
-      //error
+      toggleError(true, "sorry, toy have exceeded your hourly rate limit!")
     }
   }
 
   useEffect(() => {
     checkRequests()
   }, [])
+  const toggleError = (show: boolean = false, msg: string = "") => {
+    setIsError({ show, msg })
+  }
   return (
-    <GithubContext.Provider value={{ githubUser, repos, followers, requests }}>
+    <GithubContext.Provider
+      value={{ githubUser, repos, followers, requests, limit, isError }}
+    >
       {children}
     </GithubContext.Provider>
   )
