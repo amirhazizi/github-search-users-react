@@ -66,7 +66,6 @@ const GithubProvider = ({ children }: PropType) => {
           rate: { limit, remaining, reset },
         },
       } = await autoFetch("/rate_limit")
-
       setRequests(remaining)
       setLimit(limit)
       if (!remaining) {
