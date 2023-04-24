@@ -4,9 +4,17 @@ import { useAuth0 } from "@auth0/auth0-react"
 
 type PrivateRouteProps = {
   children: React.ReactNode
-  user: {}
 }
-const PrivateRoute = ({ children, user }: PrivateRouteProps) => {
-  return user ? children : <Navigate to='/login' />
+const PrivateRoute = ({ children }: PrivateRouteProps): any => {
+  const { isAuthenticated, user } = useAuth0()
+  const isUser = isAuthenticated && user
+
+  return user ? (
+    children
+  ) : (
+    <>
+      <Navigate to='/login' />
+    </>
+  )
 }
 export default PrivateRoute

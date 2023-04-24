@@ -6,20 +6,22 @@ function App() {
   const { isAuthenticated, user } = useAuth0()
   const isUser = isAuthenticated && user
   return (
-    <Router>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <PrivateRoute user={isUser}>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route path='/login' element={<Login />} />
-        <Route path='*' element={<Error />} />
-      </Routes>
-    </Router>
+    <AuthWrapper>
+      <Router>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route path='/login' element={<Login />} />
+          <Route path='*' element={<Error />} />
+        </Routes>
+      </Router>
+    </AuthWrapper>
   )
 }
 
