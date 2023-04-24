@@ -32,6 +32,7 @@ const GithubProvider = ({ children }: PropType) => {
   const [limit, setLimit] = useState(0)
   const [isError, setIsError] = useState({ show: false, msg: "" })
   const [isLoading, setIsLoading] = useState(false)
+
   const searchGithubUser = async (user: string) => {
     toggleError()
     setIsLoading(true)
@@ -40,17 +41,19 @@ const GithubProvider = ({ children }: PropType) => {
         await autoFetch(`/users/${user}`)
       if (userRes) {
         setGithubUser(userRes.data)
-        const { login, followers_url } = userRes
+        const { login, followers_url } = userRes.data
         await Promise.allSettled([
           autoFetch(`/users/${login}/repos?per_page=100`),
-          autoFetch(`${followers_url}/repos?per_page=100`),
+          autoFetch(`${followers_url}?per_page=100`),
         ])
           .then((results) => {
             const [repos, followers] = results
             const status = "fulfilled"
+
             if (repos.status == status) {
               setRepos(repos.value.data)
             }
+
             if (followers.status == status) {
               setFollowers(followers.value.data)
             }
