@@ -5,12 +5,21 @@ import App from "./App"
 import * as serviceWorker from "./serviceWorker"
 import { GithubProvider } from "./context/context"
 import { Auth0Provider } from "@auth0/auth0-react"
-const root = ReactDOM.createRoot(document.getElementById("root"))
+const domainURL = import.meta.env.VITE_AUTH0_DOMAIN
+const clientID = import.meta.env.VITE_AUTH0_CLIENTID
+const root = ReactDOM.createRoot(document.getElementById("root") as Element)
+
 root.render(
   <React.StrictMode>
-    <GithubProvider>
-      <App />
-    </GithubProvider>
+    <Auth0Provider
+      domain={`${domainURL}`}
+      clientId={`${clientID}`}
+      redirectUri={window.location.origin}
+    >
+      <GithubProvider>
+        <App />
+      </GithubProvider>
+    </Auth0Provider>
   </React.StrictMode>
 )
 
