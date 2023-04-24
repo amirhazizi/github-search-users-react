@@ -42,7 +42,6 @@ const Repos = () => {
   mostStared.sort((a, b) => b.value - a.value)
   const mostUsedLanguages = mostUsed.slice(0, 5)
   const mostStaredLanguages = mostStared.slice(0, 5)
-  // console.log(mostUsed)
 
   const { stars, forks } = repos.reduce(
     (total: any, item) => {
@@ -70,9 +69,8 @@ const Repos = () => {
   )
   const mostStars: object[] = Object.values(stars)
   const mostForks: object[] = Object.values(forks)
-  const mostStaredRepos = mostStars.slice(-5)
-  mostForks.slice(-5)
-  const mostForksRepos = mostForks.reverse()
+  const mostStaredRepos = mostStars.slice(-5).reverse()
+  const mostForksRepos = mostForks.slice(-5).reverse()
 
   return (
     <section className='section'>
@@ -81,7 +79,6 @@ const Repos = () => {
         <Column3D data={mostStaredRepos} />
         <Doughnut2D data={mostStaredLanguages} />
         <Bar3D data={mostForksRepos} />
-        <div></div>
       </Wrapper>
     </section>
   )

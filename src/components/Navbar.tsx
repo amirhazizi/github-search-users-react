@@ -1,13 +1,12 @@
 import React from "react"
 import styled from "styled-components"
 import { useAuth0 } from "@auth0/auth0-react"
-import { Login } from "../pages"
-import { useGlobalGithubContext } from "../context/context"
 
 const Navbar = () => {
   const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0()
 
   const isUser = isAuthenticated && user
+  const logoutProp: any = { returnTo: window.location.origin }
   return (
     <Wrapper>
       {isUser && user.picture && <img src={user.picture} alt={user.name} />}
@@ -19,7 +18,7 @@ const Navbar = () => {
       {isUser ? (
         <button
           onClick={() => {
-            logout({ returnTo: window.location.origin })
+            logout(logoutProp)
           }}
         >
           logout
