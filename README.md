@@ -1,10 +1,5 @@
 ## Github Search User with React
 
-simple react project with github.api and login into github account.
-
-from react udemy course.
-[link](https://www.udemy.com/course/react-tutorial-and-projects-course/)
-
 ## Installation
 
 Use the package manager npm to install project
@@ -21,14 +16,14 @@ npm run dev
 
 ## About
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+simple react project with github.api and login into github account.
 
-Please make sure to update tests as appropriate.
+from react udemy course.
+[link](https://www.udemy.com/course/react-tutorial-and-projects-course/)
 
 ## Overview
 
-[](./public/screencapture.png)
+![](./public/screencapture.png)
 
 ## Preview Site
 
